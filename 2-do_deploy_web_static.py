@@ -1,7 +1,8 @@
 #!/usr/bin/python3
-"""Create archive and deploy to servers"""
+"""Distribute archive to web servers
+"""
 
-from fabric.api import task, local, run, env, put, execute
+from fabric.api import task, local, run, env, put
 from datetime import datetime
 import os
 
@@ -51,21 +52,3 @@ def do_deploy(archive_path):
     run(f"ln -s /data/web_static/releases/{folder} /data/web_static/current")
 
     return True
-
-
-@task
-def deploy():
-    """Archive and deploy"""
-
-    dictionary = execute(do_pack)
-
-    if not dictionary:
-        return False
-
-    path = next(iter(dictionary.values()))
-
-    print(path)
-
-    result = do_deploy(path)
-
-    return result
